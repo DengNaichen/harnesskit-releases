@@ -1,14 +1,31 @@
 # HarnessKit Releases
 
 This repository is the public distribution endpoint for the HarnessKit CLI.
-It contains release artifacts, checksums, release notes, and the public curl
-installer. The Rust CLI source of truth is maintained separately; development
-does not happen in this repository.
+The private HarnessKit monorepo remains the only editable source, build,
+signing, notarization, and verification authority. Files on `main` are
+published projections and are not edited here.
 
-Initial binary support is limited to:
+## Install
+
+Install the latest release to `~/.local/bin`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/DengNaichen/harnesskit-releases/main/install.sh | sh
+```
+
+Install a fixed version:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/DengNaichen/harnesskit-releases/main/install.sh | sh -s -- --version X.Y.Z
+```
+
+The installer detects the supported platform, downloads the matching archive
+and checksum from this repository's GitHub Releases, verifies SHA-256 and the
+binary version, then atomically replaces `~/.local/bin/harnesskit`.
+
+Supported platforms:
 
 - macOS Apple Silicon
 - Linux x86_64
 
-Release assets and installation instructions will be added by the HarnessKit
-release pipeline.
+Windows and macOS Intel are not currently published.
