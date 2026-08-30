@@ -1,0 +1,4 @@
+interface:
+  display_name: "HarnessKit: Promotion"
+  short_description: "维护 Observation，并确认写入稳定 promotion candidates"
+  default_prompt: "维护当前 Repository Observation，并在适用时逐条确认 promotion candidates。"

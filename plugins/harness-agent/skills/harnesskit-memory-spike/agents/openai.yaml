@@ -1,0 +1,4 @@
+interface:
+  display_name: "HarnessKit: Observation"
+  short_description: "追加已分类 Observation，并按 Backend 决定触发维护"
+  default_prompt: "仅在 turn gate 委派时处理当前 root turn 的 Repository Observation 候选。"

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "command": "sh \"${CURSOR_PLUGIN_ROOT}/scripts/run-harnesskit\" cursor \"${CURSOR_PLUGIN_ROOT}\"",
+        "timeout": 5,
+        "matcher": "Shell"
+      }
+    ],
+    "sessionStart": [
+      {
+        "type": "command",
+        "command": "sh \"${CURSOR_PLUGIN_ROOT}/scripts/run-harnesskit\" cursor \"${CURSOR_PLUGIN_ROOT}\"",
+        "timeout": 5
+      }
+    ]
+  }
+}

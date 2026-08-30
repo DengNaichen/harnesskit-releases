@@ -1,0 +1,26 @@
+{
+  "name": "harness-agent",
+  "version": "0.8.22",
+  "description": "Adds Harness Agent repository memory and deterministic native Git preparation to Codex.",
+  "author": {
+    "name": "DengNaichen",
+    "email": "41554700+DengNaichen@users.noreply.github.com",
+    "url": "https://github.com/DengNaichen"
+  },
+  "keywords": ["repository-memory", "coding-agent", "git", "developer-tools"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Harness Agent",
+    "shortDescription": "Repository memory and native Git preparation",
+    "longDescription": "Recall repository observations, promote stable knowledge into owned artifacts, and refresh staged Harness Agent artifacts around native Git workflows.",
+    "developerName": "DengNaichen",
+    "category": "Developer Tools",
+    "capabilities": ["Instructions", "Lifecycle hooks"],
+    "websiteURL": "https://github.com/DengNaichen",
+    "defaultPrompt": [
+      "Use Harness Agent repository memory for this task.",
+      "Promote stable repository knowledge into owned artifacts.",
+      "Refresh staged Harness Agent artifacts before commit."
+    ]
+  }
+}

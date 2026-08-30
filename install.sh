@@ -82,7 +82,7 @@ if [ -z "${requested_version}" ]; then
 			latest_tag=${latest_url##*/}
 			requested_version=${latest_tag#harnesskit-v}
 			;;
-		*) fail "latest release did not resolve to a HarnessKit version" ;;
+		*) fail "latest release did not resolve to a Harness Agent version" ;;
 	esac
 fi
 

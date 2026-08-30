@@ -1,0 +1,4 @@
+interface:
+  display_name: "HarnessKit: Refresher"
+  short_description: "按 staged diff 最小同步并暂存 owner artifacts"
+  default_prompt: "按当前 staged diff 最小同步 schema 6 owner artifacts，并显式暂存本 skill 的修改。"

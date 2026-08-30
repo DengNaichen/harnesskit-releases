@@ -1,0 +1,14 @@
+{
+  "name": "harness-agent",
+  "displayName": "Harness Agent",
+  "version": "0.8.22",
+  "description": "Adds Harness Agent repository memory and deterministic native Git preparation to Cursor.",
+  "author": {
+    "name": "DengNaichen",
+    "email": "41554700+DengNaichen@users.noreply.github.com",
+    "url": "https://github.com/DengNaichen"
+  },
+  "keywords": ["repository-memory", "coding-agent", "git", "developer-tools"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks-cursor.json"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "harness-agent-claude-marketplace",
+  "description": "Harness Agent plugins for Claude Code.",
+  "owner": {
+    "name": "DengNaichen",
+    "url": "https://github.com/DengNaichen"
+  },
+  "plugins": [
+    {
+      "name": "harness-agent",
+      "description": "Repository memory and deterministic native Git preparation for Claude Code.",
+      "source": "./plugins/harness-agent",
+      "category": "development"
+    }
+  ]
+}

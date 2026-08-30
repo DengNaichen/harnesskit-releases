@@ -1,0 +1,17 @@
+{
+  "name": "harness-agent-cursor-marketplace",
+  "owner": {
+    "name": "DengNaichen",
+    "email": "41554700+DengNaichen@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "Harness Agent plugins for Cursor.",
+    "version": "0.8.22"
+  },
+  "plugins": [
+    {
+      "name": "harness-agent",
+      "source": "./plugins/harness-agent"
+    }
+  ]
+}

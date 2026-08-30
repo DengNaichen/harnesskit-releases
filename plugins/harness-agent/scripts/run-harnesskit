@@ -1,0 +1,74 @@
+#!/bin/sh
+set -eu
+
+if [ "$#" -ne 2 ]; then
+	echo "harness-agent: expected host and plugin root" >&2
+	exit 2
+fi
+
+host=$1
+plugin_root=$2
+case "$host" in
+	codex|claude|cursor) ;;
+	*)
+		echo "harness-agent: unsupported host $host" >&2
+		exit 2
+		;;
+esac
+case "$plugin_root" in
+	/*) ;;
+	*)
+		echo "harness-agent: plugin root must be absolute" >&2
+		exit 2
+		;;
+esac
+case "${HOME:-}" in
+	/*) ;;
+	*)
+		echo "harness-agent: HOME must be an absolute path" >&2
+		exit 1
+		;;
+esac
+
+binary="${HOME}/.local/bin/harnesskit"
+if [ ! -x "$binary" ]; then
+	echo "harness-agent: canonical $binary is not installed" >&2
+	exit 1
+fi
+if ! IFS= read -r plugin_version <"${plugin_root}/VERSION" || [ -z "$plugin_version" ]; then
+	echo "harness-agent: plugin VERSION is unavailable" >&2
+	exit 1
+fi
+actual=$("$binary" --version 2>/dev/null || true)
+case "$actual" in
+	"harnesskit "*" (contract 6)") cli_version=${actual#harnesskit }; cli_version=${cli_version% (contract 6)} ;;
+	*)
+		echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want contract 6" >&2
+		exit 1
+		;;
+esac
+
+version_at_least() {
+	left=$1
+	right=$2
+	case "$left:$right" in *[!0-9.:]*) return 1 ;; esac
+	old_ifs=$IFS
+	IFS=.
+	set -- $left
+	[ "$#" -eq 3 ] || { IFS=$old_ifs; return 1; }
+	left_major=$1 left_minor=$2 left_patch=$3
+	set -- $right
+	[ "$#" -eq 3 ] || { IFS=$old_ifs; return 1; }
+	right_major=$1 right_minor=$2 right_patch=$3
+	IFS=$old_ifs
+	[ "$left_major" -gt "$right_major" ] ||
+		{ [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -gt "$right_minor" ]; } ||
+		{ [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -eq "$right_minor" ] && [ "$left_patch" -ge "$right_patch" ]; }
+}
+
+if ! version_at_least "$cli_version" "$plugin_version"; then
+	echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version} (contract 6)" >&2
+	exit 1
+fi
+
+exec "$binary" hook "--$host" --plugin-root "$plugin_root"
