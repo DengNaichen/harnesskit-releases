@@ -1,6 +1,6 @@
 {
   "name": "harness-agent",
-  "version": "0.8.22",
+  "version": "0.8.23",
   "description": "Adds Harness Agent repository memory and deterministic native Git preparation to Codex.",
   "author": {
     "name": "DengNaichen",

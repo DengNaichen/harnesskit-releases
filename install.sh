@@ -123,7 +123,7 @@ case "${extractor}" in
 esac
 [ -s "${binary_path}" ] || fail "archive does not contain harnesskit"
 chmod 755 "${binary_path}"
-expected_version="harnesskit ${requested_version} (contract 6)"
+expected_version="harnesskit ${requested_version}"
 actual_version=$("${binary_path}" --version) || fail "downloaded harnesskit could not run"
 [ "${actual_version}" = "${expected_version}" ] || fail "downloaded harnesskit version does not match ${requested_version}"
 

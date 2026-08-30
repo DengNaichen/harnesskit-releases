@@ -1,7 +1,7 @@
 # Harness Agent Releases
 
 This repository is the public distribution endpoint for the Harness Agent CLI
-and native Codex, Claude Code, and Cursor Plugins.
+and native Codex and Claude Code Plugins.
 The private Harness Agent monorepo remains the only editable source, build,
 signing, notarization, and verification authority. Files on `main` are
 published projections and are not edited here.
@@ -31,61 +31,37 @@ Supported platforms:
 
 Windows and macOS Intel are not currently published.
 
-## Install an agent plugin
+## Set up coding agents
 
 The native plugins call the canonical `~/.local/bin/harnesskit` installed above
-only after verifying contract 6 and a CLI version not older than the Plugin. This
+only after verifying a CLI version not older than the Plugin. This
 allows `harnesskit update` before the host refreshes its Plugin. They bundle
-the same three Harness Agent Skills and lifecycle Hook contracts for Codex,
-Claude Code, and Cursor.
-
-Codex:
-
-If the target host already uses a direct CLI-managed integration, remove that
-ownership before installing its Plugin:
+the same three Harness Agent Skills and lifecycle Hook contracts for Codex and
+Claude Code. Cursor uses the same canonical Skill bytes through its CLI-managed
+direct integration.
 
 ```sh
-harnesskit uninstall --codex   # or --claude / --cursor
+harnesskit setup
 ```
 
-Codex and Cursor legacy installs share `~/.agents/skills`; reinstall the other
-legacy host afterward only when it intentionally remains on the legacy path.
+Setup adds the public Marketplace and installs the native Plugin for Codex and
+Claude Code. Cursor is CLI-managed: setup installs and verifies its direct Skills,
+Hooks, and rule instead of adding a Marketplace.
+
+The same setup journey configures MCP through its separate conflict, migration,
+and OAuth ownership checks. Plugin installation never takes over an existing
+same-name MCP server.
+
+Cursor and InfCode are CLI-managed:
 
 ```sh
-codex plugin marketplace add DengNaichen/harnesskit-releases
-codex plugin add harness-agent@harness-agent-codex-marketplace
-```
-
-Claude Code, from an interactive session:
-
-```text
-/plugin marketplace add DengNaichen/harnesskit-releases
-/plugin install harness-agent@harness-agent-claude-marketplace
-```
-
-Cursor:
-
-```sh
-cursor-agent plugin marketplace add https://github.com/DengNaichen/harnesskit-releases
-```
-
-Then enable `harness-agent` from Cursor's `/plugins` interface. Cursor Agent
-currently exposes marketplace management but no non-interactive plugin install
-command.
-
-Plugin installation does not take over an existing same-name MCP server. Connect
-the host separately with `harnesskit mcp setup --codex`, `--claude`, or `--cursor`
-so the existing conflict, migration, and OAuth ownership checks remain in force.
-
-InfCode remains CLI-managed:
-
-```sh
+harnesskit install --cursor
 harnesskit install --infcode
 ```
 
-Existing Codex, Claude, or Cursor installations made with `harnesskit install`
-remain supported, but must not be enabled alongside the native Plugin for the
-same host.
+Existing Codex or Claude direct installations are bounded migration input, not a
+supported installation fallback. They migrate only after Plugin install. Cursor has
+no Plugin delivery path.
 
 ## Update
 
@@ -100,3 +76,7 @@ The command verifies the published SHA-256 checksum and downloaded binary versio
 before atomic replacement. It is a no-op at the latest version, does not downgrade,
 and refuses to modify Homebrew or any other non-canonical installation. Use the
 installer with `--version X.Y.Z` for a fixed version or rollback.
+Installations whose `--version` still includes the retired parenthesized suffix must
+rerun the installer once to cross that output cutover; later self-updates work normally.
+Codex and Claude users must also refresh the Harness Agent Plugin from the host Plugin
+manager so its launcher and the CLI cross the cutover together.

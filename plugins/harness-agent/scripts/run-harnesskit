@@ -41,9 +41,9 @@ if ! IFS= read -r plugin_version <"${plugin_root}/VERSION" || [ -z "$plugin_vers
 fi
 actual=$("$binary" --version 2>/dev/null || true)
 case "$actual" in
-	"harnesskit "*" (contract 6)") cli_version=${actual#harnesskit }; cli_version=${cli_version% (contract 6)} ;;
+	"harnesskit "*) cli_version=${actual#harnesskit } ;;
 	*)
-		echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want contract 6" >&2
+		echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version}" >&2
 		exit 1
 		;;
 esac
@@ -67,7 +67,7 @@ version_at_least() {
 }
 
 if ! version_at_least "$cli_version" "$plugin_version"; then
-	echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version} (contract 6)" >&2
+	echo "harness-agent: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version}" >&2
 	exit 1
 fi
 
