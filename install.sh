@@ -140,3 +140,8 @@ case ":${PATH:-}:" in
 	*":${install_directory}:"*) ;;
 	*) printf 'Add %s to PATH to run harnesskit directly.\n' "${install_directory}" ;;
 esac
+if [ "${operating_system}" = "Darwin" ]; then
+	if ! "${install_directory}/harnesskit" schedule enable >/dev/null 2>&1; then
+		printf 'Timed Codex hook reporting was not enabled.\n' >&2
+	fi
+fi

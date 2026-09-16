@@ -36,7 +36,7 @@ Windows and macOS Intel are not currently published.
 The native plugins call the canonical `~/.local/bin/harnesskit` installed above
 only after verifying a CLI version not older than the Plugin. This
 allows `harnesskit update` before the host refreshes its Plugin. They bundle
-the same three Harness Agent Skills and lifecycle Hook contracts for Codex and
+the same two Harness Agent Skills and lifecycle Hook contracts for Codex and
 Claude Code. Cursor uses the same canonical Skill bytes through its CLI-managed
 direct integration.
 
@@ -44,23 +44,38 @@ direct integration.
 harnesskit setup
 ```
 
-Setup adds the public Marketplace and installs the native Plugin for Codex and
-Claude Code. Cursor is CLI-managed: setup installs and verifies its direct Skills,
+The CLI embeds the complete Plugin, including Skills, Hooks, manifests, launcher,
+VERSION and Marketplace catalogs. Setup extracts it into
+`~/.harnesskit/plugin-marketplaces/<bundle-sha256>/` and installs it through a local
+Marketplace for Codex and Claude Code, without downloading Plugin assets from GitHub.
+Existing Marketplaces with a different source are preserved and reported as conflicts;
+remove the old Marketplace through the host Plugin manager before installing this bundle.
+Use the same procedure when upgrading to a CLI with different Plugin assets.
+Extracted bundles are retained on uninstall. MCP still requires access to its service.
+
+Cursor is CLI-managed: setup installs and verifies its direct Skills,
 Hooks, and rule instead of adding a Marketplace.
 
 The same setup journey configures MCP through its separate conflict, migration,
 and OAuth ownership checks. Plugin installation never takes over an existing
 same-name MCP server.
 
-Cursor and InfCode are CLI-managed:
+Standalone delivery management is symmetric across all four hosts:
 
 ```sh
-harnesskit install --cursor
-harnesskit install --infcode
+harnesskit add --codex
+harnesskit add --claude
+harnesskit add --cursor
+harnesskit add --infcode
+harnesskit remove --codex
+harnesskit remove --claude
+harnesskit remove --cursor
+harnesskit remove --infcode
 ```
 
 Existing Codex or Claude direct installations are bounded migration input, not a
-supported installation fallback. They migrate only after Plugin install. Cursor has
+supported installation fallback. Guided setup migrates them only after Plugin install.
+Standalone add/remove do not configure MCP or run legacy migration. Cursor has
 no Plugin delivery path.
 
 ## Update
@@ -80,3 +95,11 @@ Installations whose `--version` still includes the retired parenthesized suffix 
 rerun the installer once to cross that output cutover; later self-updates work normally.
 Codex and Claude users must also refresh the Harness Agent Plugin from the host Plugin
 manager so its launcher and the CLI cross the cutover together.
+
+## Uninstall
+
+Run `harnesskit uninstall` from the canonical `~/.local/bin/harnesskit` installation to
+remove current Codex, Claude, Cursor, and InfCode deliveries, then delete the binary last.
+Any delivery failure preserves the binary. Marketplace entries, MCP configuration,
+credentials, setup state, and the install directory are not removed. Non-canonical
+executables are rejected before any delivery mutation.

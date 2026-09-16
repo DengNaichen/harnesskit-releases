@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "harness-agent",
-      "description": "Repository memory and deterministic native Git preparation for Claude Code.",
+      "description": "Scoped Repository Observation collection and deterministic native Git preparation for Claude Code.",
       "source": "./plugins/harness-agent",
       "category": "development"
     }

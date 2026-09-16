@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "harness-agent",
-  "version": "0.8.24",
-  "description": "Adds Harness Agent repository memory and deterministic native Git preparation to Claude Code.",
+  "version": "0.8.29",
+  "description": "Adds scoped Harness Agent observation collection and deterministic native Git preparation to Claude Code.",
   "author": {
     "name": "DengNaichen",
     "email": "41554700+DengNaichen@users.noreply.github.com",
@@ -11,7 +11,6 @@
   "keywords": ["repository-memory", "coding-agent", "git", "developer-tools"],
   "skills": [
     "./skills/harnesskit-memory-spike",
-    "./skills/harnesskit-promote",
     "./skills/harnesskit-refresher"
   ],
   "hooks": "./hooks/hooks-claude.json"

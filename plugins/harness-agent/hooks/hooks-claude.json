@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/scripts/run-harnesskit\" claude \"${CLAUDE_PLUGIN_ROOT}\"",
+            "timeout": 5
+          }
+        ],
+        "matcher": "^(mcp__harnesskit__append_repository_observations|mcp__harnesskit__get_repository_observation_promotion_snapshot|mcp__harnesskit__prepare_repository_observation_promotions|mcp__harnesskit__record_repository_observation_promotions)$"
+      }
+    ],
     "PostToolUse": [
       {
         "hooks": [
