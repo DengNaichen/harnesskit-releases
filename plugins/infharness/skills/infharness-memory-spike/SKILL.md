@@ -1,11 +1,11 @@
 ---
-name: harnesskit-memory-spike
-description: 仅在 Harness Agent turn gate 明确委派时，筛选并追加当前 root session 中值得跨会话保留的仓库观察。
+name: infharness-memory-spike
+description: 仅在 InfHarness turn gate 明确委派时，筛选并追加当前 root session 中值得跨会话保留的仓库观察。
 ---
 
-# HarnessKit: Observation
+# InfHarness: Observation
 
-仅在 Harness Agent SessionStart turn gate 明确委派时执行，仅对 primary/root agent 生效。没有该委派时立即停止，不调用工具、不访问网络、不修改文件。每个 root turn 至多执行一次；不得由 subagent、自主检查或用户直接调用。筛选普通 Repository Observation 与 confirmed Glossary Evidence 两类平级候选，并把保留项连同 nullable owner 放入同一个 Observation batch；成功写入达到维护阈值时，委派同一个 Agent 执行现有 Refresher 的本地整理流程。
+仅在 InfHarness SessionStart turn gate 明确委派时执行，仅对 primary/root agent 生效。没有该委派时立即停止，不调用工具、不访问网络、不修改文件。每个 root turn 至多执行一次；不得由 subagent、自主检查或用户直接调用。筛选普通 Repository Observation 与 confirmed Glossary Evidence 两类平级候选，并把保留项连同 nullable owner 放入同一个 Observation batch；成功写入达到维护阈值时，委派同一个 Agent 执行现有 Refresher 的本地整理流程。
 
 Memory Spike 负责 append 前的普通候选 gate。正常 Refresher 文档刷新与 append 的维护阈值是两个独立入口，
 都由同一 root agent 整理当前已认证 user、Repository 与 exact branch 的 Observation。最多 20 条且 content
@@ -56,11 +56,11 @@ confirmed Glossary Evidence 只回答“代码库特有概念是什么”。它�
 
 ## 有候选
 
-只向用户已配置且已认证的 `harnesskit` MCP server 发送本次筛选后的 Observation batch。模型调用
-`append_repository_observations` 时只生成 `observations`；Harness Agent PreToolUse 会在同一次执行前用本地
+只向用户已配置且已认证的 `infharness` MCP server 发送本次筛选后的 Observation batch。模型调用
+`append_repository_observations` 时只生成 `observations`；InfHarness PreToolUse 会在同一次执行前用本地
 Git 整体覆盖 top-level `canonical_remote` 与 `client_context`。不得由模型猜测、读取或生成这两个字段。
 append 至多调用一次。只在该调用成功且返回布尔值 `maintain_required: true` 时，读取同一分发目录的
-[`harnesskit-refresher`](../harnesskit-refresher/SKILL.md)，明确以“仅执行本地整理与云端写回”的阈值入口
+[`infharness-refresher`](../infharness-refresher/SKILL.md)，明确以“仅执行本地整理与云端写回”的阈值入口
 委派给当前 root agent，并完成其中一个 bounded batch。此入口不需要 Git diff、不重新 append、不创建
 第二个 agent。false、字段缺失、非布尔值或 append 失败时，不触发阈值维护。
 

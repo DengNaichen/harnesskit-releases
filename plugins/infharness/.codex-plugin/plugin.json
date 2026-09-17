@@ -1,7 +1,7 @@
 {
-  "name": "harness-agent",
-  "version": "0.8.29",
-  "description": "Adds scoped Harness Agent observation collection and document refresh after commits to Codex.",
+  "name": "infharness",
+  "version": "0.8.30",
+  "description": "Adds scoped InfHarness observation collection and document refresh after commits to Codex.",
   "author": {
     "name": "DengNaichen",
     "email": "41554700+DengNaichen@users.noreply.github.com",
@@ -11,16 +11,18 @@
   "skills": "./skills/",
   "hooks": "./hooks/hooks-codex.json",
   "interface": {
-    "displayName": "Harness Agent",
-    "shortDescription": "Scoped observations and document refresh",
+    "displayName": "InfHarness",
+    "shortDescription": "Shared repository context for every coding agent.",
     "longDescription": "Collect repository observations with local Git provenance and refresh managed documentation after committed input changes.",
     "developerName": "DengNaichen",
     "category": "Developer Tools",
     "capabilities": ["Instructions", "Lifecycle hooks"],
     "websiteURL": "https://github.com/DengNaichen",
+    "composerIcon": "./assets/infharness-logo.svg",
+    "logo": "./assets/infharness-logo.svg",
     "defaultPrompt": [
       "Collect durable repository observations after this task.",
-      "Refresh Harness Agent documentation for committed changes."
+      "Refresh InfHarness documentation for committed changes."
     ]
   }
 }

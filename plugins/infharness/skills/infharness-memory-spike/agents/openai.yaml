@@ -1,4 +1,4 @@
 interface:
-  display_name: "HarnessKit: Observation"
+  display_name: "InfHarness: Observation"
   short_description: "追加带本地 Git provenance 的已分类 Observation"
   default_prompt: "仅在 turn gate 委派时处理当前 root turn 的 Repository Observation 候选。"

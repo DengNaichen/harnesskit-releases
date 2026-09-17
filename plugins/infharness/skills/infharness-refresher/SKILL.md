@@ -1,9 +1,9 @@
 ---
-name: harnesskit-refresher
-description: 在 Harness Agent Git feedback 或 Observation 维护委派后，由当前 Agent 同步仓库文档、整理云端观察并写回结果。
+name: infharness-refresher
+description: 在 InfHarness Git feedback 或 Observation 维护委派后，由当前 Agent 同步仓库文档、整理云端观察并写回结果。
 ---
 
-# HarnessKit: Refresher
+# InfHarness: Refresher
 
 只接受三个入口：Codex PostToolUse 的 committed lifecycle feedback；Claude、Cursor 与 InfCode PostToolUse
 确认 direct `git add ...` 成功且存在真实 staged diff；或 Observation Skill 在成功 append 返回
@@ -68,7 +68,7 @@ agent。同一次可见 preparation 不重入；本 Skill 暂存文件产生的 
    Refresher must not read, update, or stage Glossary；不得读取、修改或暂存
    `docs/GLOSSARY.md`，也不得因为 staged diff 命中根范围而把它重新加入候选。
 
-3. 仅 Git feedback 入口对有效条目取得范围前缀（根为空），按最长 prefix 路由本次 diff 中的非 Harness Agent
+3. 仅 Git feedback 入口对有效条目取得范围前缀（根为空），按最长 prefix 路由本次 diff 中的非 InfHarness
    路径：路径等于某个非空前缀或以该前缀加 `/` 开头时命中该范围，多个前缀同时匹配取
    最长的那个；读取根 `AGENTS.md`、命中路径上各级已登记的 `AGENTS.md` 链，以及最深
    命中前缀已登记的 Architecture 产物。
@@ -83,7 +83,7 @@ agent。同一次可见 preparation 不重入；本 Skill 暂存文件产生的 
 ## 本地整理与云端写回
 
 正常文档刷新成功后（包括文档无需修改），或上述阈值委派后，执行以下流程。每次委派只处理一个 batch；
-不等待攒够 20 条，不循环取下一批，不重新 append。只使用用户已配置且认证的 `harnesskit` MCP。
+不等待攒够 20 条，不循环取下一批，不重新 append。只使用用户已配置且认证的 `infharness` MCP。
 三个维护工具的 `canonical_remote` 与 `client_context` 由现有 PreToolUse 从本地 Git 注入；模型只生成
 下述业务参数，不生成 user、workspace、branch、session 或其他来源身份。
 

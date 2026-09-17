@@ -1,16 +1,16 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "harness-agent-claude-marketplace",
-  "description": "Harness Agent plugins for Claude Code.",
+  "name": "infharness-claude-marketplace",
+  "description": "InfHarness plugins for Claude Code.",
   "owner": {
     "name": "DengNaichen",
     "url": "https://github.com/DengNaichen"
   },
   "plugins": [
     {
-      "name": "harness-agent",
+      "name": "infharness",
       "description": "Scoped Repository Observation collection and deterministic native Git preparation for Claude Code.",
-      "source": "./plugins/harness-agent",
+      "source": "./plugins/infharness",
       "category": "development"
     }
   ]

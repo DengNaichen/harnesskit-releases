@@ -1,8 +1,8 @@
-# Harness Agent Releases
+# InfHarness Releases
 
-This repository is the public distribution endpoint for the Harness Agent CLI
+This repository is the public distribution endpoint for the InfHarness CLI
 and native Codex and Claude Code Plugins.
-The private Harness Agent monorepo remains the only editable source, build,
+The private InfHarness monorepo remains the only editable source, build,
 signing, notarization, and verification authority. Files on `main` are
 published projections and are not edited here.
 
@@ -35,10 +35,21 @@ Windows and macOS Intel are not currently published.
 
 The native plugins call the canonical `~/.local/bin/harnesskit` installed above
 only after verifying a CLI version not older than the Plugin. This
-allows `harnesskit update` before the host refreshes its Plugin. They bundle
-the same two Harness Agent Skills and lifecycle Hook contracts for Codex and
-Claude Code. Cursor uses the same canonical Skill bytes through its CLI-managed
-direct integration.
+allows `harnesskit update` before the host refreshes its Plugin. Codex exposes
+`infharness-guide` plus the `infharness-memory-spike` and `infharness-refresher`
+lifecycle Skills. Claude Code exposes the two lifecycle Skills. Cursor uses
+the canonical Skill bytes through its CLI-managed direct integration.
+
+The Plugin package is now `infharness`, not `harness-agent`; Marketplaces are
+`infharness-codex-marketplace` and `infharness-claude-marketplace`. MCP uses
+`infharness` as server name, `infharness_context` and `infharness://`.
+The OAuth client ID remains `harnesskit`; branding does not change that identity.
+This is a breaking cutover with no old-name aliases or automatic brand migration.
+Before upgrading, remove managed integrations and MCP entries with the old CLI,
+and remove the old Plugin/Marketplaces using each host's Plugin manager. Then
+install the new CLI, run setup, authenticate MCP again and start a new session.
+Leaving the old Plugin enabled can run duplicate Hooks. The CLI command remains
+`harnesskit`; local storage paths and release URLs are unchanged.
 
 ```sh
 harnesskit setup
@@ -93,7 +104,7 @@ and refuses to modify Homebrew or any other non-canonical installation. Use the
 installer with `--version X.Y.Z` for a fixed version or rollback.
 Installations whose `--version` still includes the retired parenthesized suffix must
 rerun the installer once to cross that output cutover; later self-updates work normally.
-Codex and Claude users must also refresh the Harness Agent Plugin from the host Plugin
+Codex and Claude users must also refresh the InfHarness Plugin from the host Plugin
 manager so its launcher and the CLI cross the cutover together.
 
 ## Uninstall

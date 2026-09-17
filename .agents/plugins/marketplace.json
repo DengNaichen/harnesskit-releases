@@ -1,14 +1,14 @@
 {
-  "name": "harness-agent-codex-marketplace",
+  "name": "infharness-codex-marketplace",
   "interface": {
-    "displayName": "Harness Agent"
+    "displayName": "InfHarness"
   },
   "plugins": [
     {
-      "name": "harness-agent",
+      "name": "infharness",
       "source": {
         "source": "local",
-        "path": "./plugins/harness-agent"
+        "path": "./plugins/infharness"
       },
       "policy": {
         "installation": "AVAILABLE",
