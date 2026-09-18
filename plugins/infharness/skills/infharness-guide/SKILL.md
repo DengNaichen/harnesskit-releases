@@ -29,7 +29,7 @@ description: >-
 | --- | --- | --- |
 | `infharness_context` | 查询产品工作流，或进入上表中已确定的能力 | 查询目录传 `{}`；例如最佳实践传 `{"context":"best-practice"}`。从返回的 `documents` 中找到入口及相关资源 URI。此调用只发现文档，不执行工作流。 |
 | 宿主提供的 MCP resource 读取能力 | 获得入口 URI 后，或指南要求继续读取子资源时 | 指定提供目录的同一 server 和返回的 URI，读取正文。例如读取 `infharness://context/best-practice`。这是 MCP 的资源读取能力，不是名为 `best-practice` 的产品工具；具体调用名称和参数以宿主为准。 |
-| `submit_repository_harness_score` | 用户要求评分，且已读评分资源、完成本地评估后 | 按当前 schema 提交 `canonical_remote`、`score`、`dimensions`，以及可选 `suggestions`。它保存评价，不代替 Agent 计算；读取成功结果后才能声称已提交。无需传 Workspace。 |
+| `submit_repository_harness_score` | 用户要求评分，且已读评分资源、完成本地评估后 | 按当前 schema 提交 `canonical_remote`、`rubric_version`、`score`、`dimensions`，以及可选 `suggestions`。它保存评价，不代替 Agent 计算；读取成功结果后才能声称已提交。无需传 Workspace。 |
 | `list_workspaces` | 用户任务需要显式 Workspace，且尚无已确认的目标 ID 时 | 传 `{}`，取得当前用户可访问的 Workspace ID 与名称。列表不代表用户已选定目标；不要把它作为上下文读取或 Repository 评分的前置步骤。 |
 | `list_workspace_hooks` | 用户要查找已保存的团队 Hook | 传明确的 `workspace_id`，按需使用名称过滤和分页参数；返回摘要与稳定 Hook ID，完整字段以实际 schema 为准。 |
 | `get_workspace_hook` | 已知 Hook ID，需要读取完整内容时 | 传 `hook_id`，读取返回的文件和配置；读取不等于执行或安装。 |

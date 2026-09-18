@@ -33,6 +33,17 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "^startup$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${HOME}/.local/bin/harnesskit\" sync run --plugin-root \"${PLUGIN_ROOT}\"",
+            "async": true,
+            "timeout": 65
+          }
+        ]
       }
     ]
   }
