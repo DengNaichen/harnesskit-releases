@@ -1,6 +1,6 @@
 {
   "name": "infharness",
-  "version": "0.8.32",
+  "version": "0.8.33",
   "description": "Adds scoped InfHarness observation collection and document refresh after commits to Codex.",
   "author": {
     "name": "DengNaichen",
