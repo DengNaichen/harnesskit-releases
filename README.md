@@ -98,14 +98,24 @@ release directly:
 harnesskit update
 ```
 
-The command verifies the published SHA-256 checksum and downloaded binary version
-before atomic replacement. It is a no-op at the latest version, does not downgrade,
-and refuses to modify Homebrew or any other non-canonical installation. Use the
-installer with `--version X.Y.Z` for a fixed version or rollback.
-Installations whose `--version` still includes the retired parenthesized suffix must
-rerun the installer once to cross that output cutover; later self-updates work normally.
-Codex and Claude users must also refresh the InfHarness Plugin from the host Plugin
-manager so its launcher and the CLI cross the cutover together.
+The command verifies the published checksum and binary version before atomic
+replacement, then the new CLI updates already installed official integrations.
+It checks integrations even when the binary is already latest. It preserves service
+configuration, authentication and disabled preferences, and does not enroll new agents.
+An incomplete host update is reported separately and makes the command fail; rerun
+`harnesskit update` to recover. Start a new agent session after upgrading.
+
+Recorded official local Plugin bundles are verified before switching versions;
+unknown sources, modified content and team additions are preserved and reported as
+conflicts. Team asset migration is separate. Codex updates preserve its enabled
+preference without reinstalling the Plugin; Claude uses its native update interface.
+
+Non-canonical installations and automatic downgrades are rejected. Use the installer
+with `--version X.Y.Z` for a fixed binary version; host integrations are not rolled back.
+When upgrading from the older binary-only updater, run `harnesskit update` again
+with the new CLI to complete integrations. For the retired parenthesized version-output
+cutover, rerun the installer once, then refresh the InfHarness Plugin through the
+new `harnesskit update` flow when its old source is a recorded official local bundle.
 
 ## Uninstall
 
