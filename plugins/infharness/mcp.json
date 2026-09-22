@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "infharness": {
+      "url": "https://harnesskit.invalid/mcp",
+      "auth": {
+        "CLIENT_ID": "harnesskit"
+      }
+    }
+  }
+}

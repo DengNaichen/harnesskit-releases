@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "infharness",
-      "description": "Scoped Repository Observation collection and deterministic native Git preparation for Claude Code.",
+      "description": "Scoped Repository Observation collection and document refresh after commits for Claude Code.",
       "source": "./plugins/infharness",
       "category": "development"
     }

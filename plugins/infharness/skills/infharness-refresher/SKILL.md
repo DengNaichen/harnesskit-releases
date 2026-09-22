@@ -5,26 +5,26 @@ description: 在 InfHarness Git feedback 或 Observation 维护委派后，由�
 
 # InfHarness: Refresher
 
-只接受三个入口：Codex PostToolUse 的 committed lifecycle feedback；Claude、Cursor 与 InfCode PostToolUse
+只接受三个入口：Codex 或 Claude PostToolUse 的 committed lifecycle feedback；Cursor 与 InfCode PostToolUse
 确认 direct `git add ...` 成功且存在真实 staged diff；或 Observation Skill 在成功 append 返回
 `maintain_required: true` 后明确委派一次 memory maintenance。三者都由当前 root agent 执行，不另起
 agent。同一次可见 preparation 不重入；本 Skill 暂存文件产生的 feedback 不重新启动当前维护。
 没有对应委派时立即停止。
 
-Codex 一次 callback 可包含多个关联 worktree 的明确 committed range；逐项处理各自 root，
+Codex 或 Claude 一次 callback 可包含多个关联 worktree 的明确 committed range；逐项处理各自 root，
 同一 preparation 的防重入不得吞掉其他 root 的委派。各项维护工具使用该项 feedback 给出的
 `maintenance_root`，经 Hook 校验后整理当前 session 或目标 branch 的记忆。
 
 1. 切换到 Agent feedback 或阈值委派指明的仓库并读取仓库指令。Git feedback 入口必须
    逐字运行 feedback 给出的 `harnesskit refresher diff` 命令，不要删改参数，也不要用普通 `git diff` 代替。
 
-   Codex committed lifecycle feedback 会同时给出 `--root`、`--base`、`--head`、`--branch-kind`，
+   Codex/Claude committed lifecycle feedback 会同时给出 `--root`、`--base`、`--head`、`--branch-kind`，
    symbolic branch 还会给出完整 `--branch refs/heads/...`。CLI 只有在当前 canonical worktree、完整
    symbolic ref 或 detached kind 与 full HEAD 都仍匹配时才输出该不可变 commit range；scope 或 HEAD
    已变化时明确失败并有界 no-op。`--base empty` 只表示先前 checkpoint 是真实 unborn repository，
    任意缺失、非法或不可解析 object ID 都不会退化成 empty tree。
 
-   Claude、Cursor 与 InfCode 的 staged preparation feedback 给出
+   Cursor 与 InfCode 的 staged preparation feedback 给出
    `harnesskit refresher diff --root /absolute/repository`。该命令比较 HEAD tree 与当前 index
    `write-tree`。只有 `HEAD` 是有效 symbolic ref 且该 ref 尚不存在的真实 unborn repository 才使用
    empty tree；valid detached HEAD 正常读取其 tree。detached missing object、corrupt HEAD/ref 或任意

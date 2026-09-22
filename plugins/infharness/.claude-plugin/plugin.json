@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "infharness",
-  "version": "0.8.35",
-  "description": "Adds scoped InfHarness observation collection and deterministic native Git preparation to Claude Code.",
+  "version": "0.8.36",
+  "description": "Adds scoped InfHarness observation collection and document refresh after commits to Claude Code.",
   "author": {
     "name": "DengNaichen",
     "email": "41554700+DengNaichen@users.noreply.github.com",

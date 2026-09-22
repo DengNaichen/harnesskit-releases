@@ -37,8 +37,8 @@ The native plugins call the canonical `~/.local/bin/harnesskit` installed above
 only after verifying a CLI version not older than the Plugin. This
 allows `harnesskit update` before the host refreshes its Plugin. Codex exposes
 `infharness-guide` plus the `infharness-memory-spike` and `infharness-refresher`
-lifecycle Skills. Claude Code exposes the two lifecycle Skills. Cursor uses
-the canonical Skill bytes through its CLI-managed direct integration.
+lifecycle Skills. Claude Code exposes the two lifecycle Skills. Cursor receives
+the same Skills, Cursor-specific Hooks, and MCP declaration through its local native Plugin.
 
 The Plugin package is now `infharness`, not `harness-agent`; Marketplaces are
 `infharness-codex-marketplace` and `infharness-claude-marketplace`. MCP uses
@@ -64,8 +64,9 @@ remove the old Marketplace through the host Plugin manager before installing thi
 Use the same procedure when upgrading to a CLI with different Plugin assets.
 Extracted bundles are retained on uninstall. MCP still requires access to its service.
 
-Cursor is CLI-managed: setup installs and verifies its direct Skills,
-Hooks, and rule instead of adding a Marketplace.
+Cursor setup installs and verifies a receipt-owned native Plugin at
+`~/.cursor/plugins/local/infharness`. Use the exact `cursor-agent --plugin-dir`
+launch command printed by setup; the Plugin carries Skills, Hooks, and MCP together.
 
 The same setup journey configures MCP through its separate conflict, migration,
 and OAuth ownership checks. Plugin installation never takes over an existing
@@ -86,8 +87,9 @@ harnesskit remove --infcode
 
 Existing Codex or Claude direct installations are bounded migration input, not a
 supported installation fallback. Guided setup migrates them only after Plugin install.
-Standalone add/remove do not configure MCP or run legacy migration. Cursor has
-no Plugin delivery path.
+Standalone add/remove do not perform legacy migration. Cursor add/remove own only
+the local native Plugin bundle and its private install receipt; `mcp setup --cursor`
+installs the same bundle and prints the in-session authentication limitation.
 
 ## Update
 
@@ -121,6 +123,7 @@ new `harnesskit update` flow when its old source is a recorded official local bu
 
 Run `harnesskit uninstall` from the canonical `~/.local/bin/harnesskit` installation to
 remove current Codex, Claude, Cursor, and InfCode deliveries, then delete the binary last.
-Any delivery failure preserves the binary. Marketplace entries, MCP configuration,
-credentials, setup state, and the install directory are not removed. Non-canonical
+Any delivery failure preserves the binary. Marketplace entries, external MCP
+configuration, credentials, setup state, and the install directory are not removed.
+Cursor Plugin MCP configuration and its ownership receipt are removed with that bundle. Non-canonical
 executables are rejected before any delivery mutation.
