@@ -29,13 +29,32 @@ Supported platforms:
 - macOS Apple Silicon
 - Linux x86_64
 
-Windows and macOS Intel are not currently published.
+Windows x86_64 has a separate portable basic CLI; the curl installer does not
+install it. macOS Intel is not published.
+
+### Windows portable CLI
+
+Download `harnesskit-vX.Y.Z-x86_64-pc-windows-msvc.zip` and its `.sha256` from the
+same release. Compare `Get-FileHash <archive> -Algorithm SHA256` with that checksum,
+then extract the ZIP to a local drive and run `./harnesskit.exe --help`.
+No MSVC runtime installation is required. The binary is not Authenticode-signed.
+
+Windows supports `auth login/status/logout`, repository inspection and explicit
+`refresher diff`. Plugin setup, MCP setup, team sync, automatic commit observation,
+report/doctor, self-update and uninstall commands remain unavailable. The agent
+setup and lifecycle instructions below apply to macOS and Linux.
+
+For a portable upgrade, close CLI processes, verify the new archive and replace
+the executable. To remove it, delete the executable; run `auth logout` beforehand
+if the current endpoint's Credential Manager entry should also be removed.
+No installer modifies PATH or host configuration. UNC/device paths are unsupported.
 
 ## Set up coding agents
 
 The native plugins call the canonical `~/.local/bin/harnesskit` installed above
-only after verifying a CLI version not older than the Plugin. This
-allows `harnesskit update` before the host refreshes its Plugin. Codex exposes
+with declaration format 1. The CLI checks operation compatibility and official
+assets before handling the callback. Older CLIs reject the negotiation flag;
+the launcher never retries without it. Codex exposes
 `infharness-guide` plus the `infharness-memory-spike` and `infharness-refresher`
 lifecycle Skills. Claude Code exposes the two lifecycle Skills. Cursor receives
 the same Skills, Cursor-specific Hooks, and MCP declaration through its local native Plugin.

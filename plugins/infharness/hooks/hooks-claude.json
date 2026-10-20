@@ -33,6 +33,17 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "^startup$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${HOME}/.local/bin/harnesskit\" sync run --host claude --plugin-root \"${CLAUDE_PLUGIN_ROOT}\" --plugin-contract 1",
+            "async": true,
+            "timeout": 65
+          }
+        ]
       }
     ]
   }

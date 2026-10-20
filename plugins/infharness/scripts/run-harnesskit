@@ -1,9 +1,11 @@
 #!/bin/sh
 set -eu
 
-if [ "$#" -ne 2 ]; then
+# Claude Code treats Hook exit 2 as a blocking error. The launcher therefore
+# returns only 0 (CLI succeeded) or 1 (any launcher or CLI failure).
+if [ "$#" -ne 2 ] && [ "$#" -ne 3 ]; then
 	echo "infharness: expected host and plugin root" >&2
-	exit 2
+	exit 1
 fi
 
 host=$1
@@ -12,14 +14,14 @@ case "$host" in
 	codex|claude|cursor) ;;
 	*)
 		echo "infharness: unsupported host $host" >&2
-		exit 2
+		exit 1
 		;;
 esac
 case "$plugin_root" in
 	/*) ;;
 	*)
 		echo "infharness: plugin root must be absolute" >&2
-		exit 2
+		exit 1
 		;;
 esac
 case "${HOME:-}" in
@@ -35,40 +37,56 @@ if [ ! -x "$binary" ]; then
 	echo "infharness: canonical $binary is not installed" >&2
 	exit 1
 fi
-if ! IFS= read -r plugin_version <"${plugin_root}/VERSION" || [ -z "$plugin_version" ]; then
-	echo "infharness: plugin VERSION is unavailable" >&2
-	exit 1
-fi
-actual=$("$binary" --version 2>/dev/null || true)
-case "$actual" in
-	"harnesskit "*) cli_version=${actual#harnesskit } ;;
-	*)
-		echo "infharness: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version}" >&2
+# A strict old CLI rejects this flag before invoking any Hook handler. Never
+# retry without negotiation: release versions do not establish compatibility.
+if [ "$host" = cursor ]; then
+	if [ "$#" -ne 3 ]; then
+		echo "runtime_instance_unavailable: Plugin instance has changed; reload the host Session" >&2
 		exit 1
-		;;
-esac
-
-version_at_least() {
-	left=$1
-	right=$2
-	case "$left:$right" in *[!0-9.:]*) return 1 ;; esac
-	old_ifs=$IFS
-	IFS=.
-	set -- $left
-	[ "$#" -eq 3 ] || { IFS=$old_ifs; return 1; }
-	left_major=$1 left_minor=$2 left_patch=$3
-	set -- $right
-	[ "$#" -eq 3 ] || { IFS=$old_ifs; return 1; }
-	right_major=$1 right_minor=$2 right_patch=$3
-	IFS=$old_ifs
-	[ "$left_major" -gt "$right_major" ] ||
-		{ [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -gt "$right_minor" ]; } ||
-		{ [ "$left_major" -eq "$right_major" ] && [ "$left_minor" -eq "$right_minor" ] && [ "$left_patch" -ge "$right_patch" ]; }
-}
-
-if ! version_at_least "$cli_version" "$plugin_version"; then
-	echo "infharness: incompatible CLI; got ${actual:-unknown}, want harnesskit >= ${plugin_version}" >&2
-	exit 1
+	fi
+	set -- hook "--$host" --plugin-root "$plugin_root" --plugin-contract 1 --plugin-instance "$3"
+else
+	if [ "$#" -ne 2 ]; then
+		echo "infharness: unexpected instance argument" >&2
+		exit 1
+	fi
+	set -- hook "--$host" --plugin-root "$plugin_root" --plugin-contract 1
 fi
 
-exec "$binary" hook "--$host" --plugin-root "$plugin_root"
+# Run the CLI in the background so HUP/INT/TERM traps run while waiting.
+# Background jobs ignore INT, so every host termination is forwarded as TERM.
+# The launcher exits only after the CLI has been reaped.
+child=
+stopping=
+stop() {
+	stopping=1
+	if [ -n "$child" ]; then
+		kill -TERM "$child" 2>/dev/null || :
+	fi
+}
+trap stop HUP INT TERM
+# Asynchronous commands default to /dev/null stdin; keep the Hook event.
+# `command` keeps a closed stdin from exiting the shell with status 2.
+if ! command exec 3<&0; then
+	echo "infharness: Hook input is unavailable" >&2
+	exit 1
+fi
+"$binary" "$@" <&3 3<&- &
+child=$!
+exec 3<&-
+if [ -n "$stopping" ]; then
+	kill -TERM "$child" 2>/dev/null || :
+fi
+while :; do
+	status=0
+	wait "$child" || status=$?
+	# Above 128 is either a trap interrupting wait or a signaled CLI; keep
+	# waiting while the CLI process still exists.
+	if [ "$status" -le 128 ] || ! kill -0 "$child" 2>/dev/null; then
+		break
+	fi
+done
+if [ "$status" -ne 0 ]; then
+	exit 1
+fi
+exit 0

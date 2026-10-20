@@ -1,0 +1,8 @@
+{
+  "format": 1,
+  "requires": {
+    "hook": 1,
+    "skill_feedback": 1,
+    "workspace_sync": 1
+  }
+}

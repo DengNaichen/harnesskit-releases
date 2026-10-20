@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${HOME}/.local/bin/harnesskit\" sync run --plugin-root \"${PLUGIN_ROOT}\"",
+            "command": "\"${HOME}/.local/bin/harnesskit\" sync run --plugin-root \"${PLUGIN_ROOT}\" --plugin-contract 1",
             "async": true,
             "timeout": 65
           }

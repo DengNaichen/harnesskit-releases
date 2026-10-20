@@ -19,6 +19,10 @@
       {
         "command": "sh \"${CURSOR_PLUGIN_ROOT}/scripts/run-harnesskit\" cursor \"${CURSOR_PLUGIN_ROOT}\"",
         "timeout": 5
+      },
+      {
+        "command": "\"${HOME}/.local/bin/harnesskit\" sync run --host cursor --plugin-root \"${CURSOR_PLUGIN_ROOT}\" --plugin-contract 1",
+        "timeout": 65
       }
     ]
   }
