@@ -1,6 +1,6 @@
 {
   "name": "infharness",
-  "version": "0.8.42",
+  "version": "0.8.43",
   "description": "Adds scoped InfHarness repository observation, native Git preparation, and the InfHarness MCP server to Cursor.",
   "author": {
     "name": "DengNaichen",
