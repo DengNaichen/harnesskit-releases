@@ -29,7 +29,7 @@ Supported platforms:
 - macOS Apple Silicon
 - Linux x86_64
 
-Windows x86_64 has a separate portable basic CLI; the curl installer does not
+Windows x86_64 has a separate portable CLI; the curl installer does not
 install it. macOS Intel is not published.
 
 ### Windows portable CLI
@@ -39,10 +39,26 @@ same release. Compare `Get-FileHash <archive> -Algorithm SHA256` with that check
 then extract the ZIP to a local drive and run `./harnesskit.exe --help`.
 No MSVC runtime installation is required. The binary is not Authenticode-signed.
 
-Windows supports `auth login/status/logout`, repository inspection and explicit
-`refresher diff`. Plugin setup, MCP setup, team sync, automatic commit observation,
-report/doctor, self-update and uninstall commands remain unavailable. The agent
-setup and lifecycle instructions below apply to macOS and Linux.
+Version 0.8.45 adds Windows agent integration support alongside `auth login/status/logout`,
+repository inspection and explicit `refresher diff`. Setup/add/remove, MCP configuration,
+doctor/report and Hook/team-sync entry points are available. Codex Marketplace metadata
+and path handling, Qoder App discovery and Claude missing-MCP status are corrected.
+Local file writes and repeat installation were verified for Codex, Claude, Cursor,
+OpenCode, Qoder and InfCode Extension, with additional isolated native/package checks.
+
+Before agent setup, place `harnesskit.exe` at
+`%USERPROFILE%\.local\bin\harnesskit.exe`, the canonical Plugin launcher location.
+Add that directory and Git for Windows `bin` / `usr\bin` to the host's PATH and restart
+it; launchers require `sh` and `cygpath`. Run setup in a real Windows console.
+Qoder App needs the generated ZIP imported; Cursor may need a window reload.
+
+This is not a claim of complete Windows host or OAuth acceptance. Production login,
+MCP connectivity, actual host loading and session Hooks require separate verification;
+the full Windows test suite is not claimed green. InfCode IDE prerelease extensions
+remain unsupported by the stable-version gate. Team sync requires compatible Backend
+Windows support and migration 085, plus `include_rules` support for Rule sync.
+Automatic CLI `update` and complete `uninstall` remain unavailable on Windows;
+per-agent `remove` is available.
 
 For a portable upgrade, close CLI processes, verify the new archive and replace
 the executable. To remove it, delete the executable; run `auth logout` beforehand

@@ -17,6 +17,12 @@ case "$host" in
 		exit 1
 		;;
 esac
+launcher_home=${HOME:-}
+# Git for Windows supplies sh and cygpath for native Plugin launchers.
+if [ "${OS:-}" = Windows_NT ]; then
+ plugin_root=$(cygpath -u "$plugin_root")
+ launcher_home=$(cygpath -u "${USERPROFILE:-$launcher_home}")
+fi
 case "$plugin_root" in
 	/*) ;;
 	*)
@@ -24,7 +30,7 @@ case "$plugin_root" in
 		exit 1
 		;;
 esac
-case "${HOME:-}" in
+case "$launcher_home" in
 	/*) ;;
 	*)
 		echo "infharness: HOME must be an absolute path" >&2
@@ -32,7 +38,8 @@ case "${HOME:-}" in
 		;;
 esac
 
-binary="${HOME}/.local/bin/harnesskit"
+binary="${launcher_home}/.local/bin/harnesskit"
+if [ "${OS:-}" = Windows_NT ]; then binary="${binary}.exe"; fi
 if [ ! -x "$binary" ]; then
 	echo "infharness: canonical $binary is not installed" >&2
 	exit 1
