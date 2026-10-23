@@ -32,9 +32,28 @@ Supported platforms:
 Windows x86_64 has a separate portable CLI; the curl installer does not
 install it. macOS Intel is not published.
 
+### Windows PowerShell installer
+
+Install the latest release to `%USERPROFILE%\.local\bin\harnesskit.exe`:
+
+```powershell
+irm https://raw.githubusercontent.com/DengNaichen/harnesskit-releases/main/install.ps1 | iex
+```
+
+Install a fixed version by setting `HARNESSKIT_VERSION` first:
+
+```powershell
+$env:HARNESSKIT_VERSION = 'X.Y.Z'; irm https://raw.githubusercontent.com/DengNaichen/harnesskit-releases/main/install.ps1 | iex
+```
+
+The script downloads the portable ZIP and checksum from this repository's GitHub
+Releases, verifies SHA-256 and the binary version, then replaces `harnesskit.exe`.
+It does not modify PATH; add the printed directory yourself. The sections below
+describe what the Windows CLI supports and the PATH requirements for agent setup.
+
 ### Windows portable CLI
 
-Download `harnesskit-vX.Y.Z-x86_64-pc-windows-msvc.zip` and its `.sha256` from the
+To install manually instead, download `harnesskit-vX.Y.Z-x86_64-pc-windows-msvc.zip` and its `.sha256` from the
 same release. Compare `Get-FileHash <archive> -Algorithm SHA256` with that checksum,
 then extract the ZIP to a local drive and run `./harnesskit.exe --help`.
 No MSVC runtime installation is required. The binary is not Authenticode-signed.
@@ -46,8 +65,9 @@ and path handling, Qoder App discovery and Claude missing-MCP status are correct
 Local file writes and repeat installation were verified for Codex, Claude, Cursor,
 OpenCode, Qoder and InfCode Extension, with additional isolated native/package checks.
 
-Before agent setup, place `harnesskit.exe` at
-`%USERPROFILE%\.local\bin\harnesskit.exe`, the canonical Plugin launcher location.
+Before agent setup, `harnesskit.exe` must be at
+`%USERPROFILE%\.local\bin\harnesskit.exe`, the canonical Plugin launcher location
+(the PowerShell installer places it there).
 Add that directory and Git for Windows `bin` / `usr\bin` to the host's PATH and restart
 it; launchers require `sh` and `cygpath`. Run setup in a real Windows console.
 Qoder App needs the generated ZIP imported; Cursor may need a window reload.
